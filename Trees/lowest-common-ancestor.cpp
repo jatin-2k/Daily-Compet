@@ -1,3 +1,57 @@
+//approach1
+class Solution
+{
+    public:
+    bool recurse(Node* root ,int val , stack<Node> &res)
+    {
+        if(root)
+        {
+            res.push(*root);
+            if(root->data==val){
+                return true;
+            }
+            else{
+                if(recurse(root->left,val,res)){
+                    return true;
+                }
+                if(recurse(root->right,val,res)){
+                    return true;
+                }
+                res.pop();
+            }
+        }
+        return false;
+        
+    }
+    
+    //Function to return the lowest common ancestor in a Binary Tree.
+    Node* lca(Node* root ,int n1 ,int n2 )
+    {
+       //
+       stack<Node> p1,p2;
+       if(recurse(root,n1,p1) && recurse(root,n2,p2)){
+           while(p1.size() > p2.size()){ p1.pop(); }
+           while(p1.size() < p2.size()){ p2.pop(); }
+           while(p1.top().data != p2.top().data){
+               p1.pop();
+               p2.pop();
+           }
+           if(!p1.empty()){
+               //cout<<p1.top().data<<endl;
+               Node *n = new Node;
+               n-> data = p1.top().data;
+               return n;
+           }
+       }
+       Node *n = new Node;
+       n -> data = -1;
+       n -> left = NULL;
+       n -> right = NULL;
+       return n;
+    }
+};
+
+//approach2
 class Solution
 {
     public:
