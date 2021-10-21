@@ -1,0 +1,1 @@
+bool isSquare(int n){ return sqrt(n)*sqrt(n) == n; }
