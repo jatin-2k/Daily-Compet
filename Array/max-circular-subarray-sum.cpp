@@ -1,51 +1,27 @@
-class Solution{
-    public:
-    int circularSubarraySum(int a[], int n) 
-    { 
-        bool flag  = false;
-        int count =0;int maxx = INT_MIN;
-        for(int i = 0; i < n; i++)
-        {
-            //Storing the maximum element in the array.
-            if(a[i] > maxx)
-              maxx = a[i];
-            //Counting total number of negative numbers in the array.  
-            if(a[i] < 0)
-              count++;
+class Solution {
+public:
+    int maxSubarraySumCircular(vector<int>& nums) {
+        int n = nums.size();
+        int normalAns = kdane(nums,n);
+        int total=0, count=0;
+        for(auto &i: nums){
+            total += i;
+            if(i<0) count++;
+            i *= -1;
         }
-        if(count == n)
-          return maxx;
-        int max_kadane = kadane(a, n); 
-        int max_wrap = 0, i; 
-        for (i = 0; i < n; i++) 
-        { 
-                        //Calculating total sum of array elements.
-                max_wrap += a[i]; 
-                //Inverting the sign of array elements.
-                a[i] = -a[i];  
-        } 
-        max_wrap = max_wrap + kadane(a, n); 
+        //if all are neg. then total+kdane will give zero
+        if(count == n) return normalAns;
+        return max(normalAns, total + kdane(nums, n));
         
-        //The maximum circular subarray sum will be maximum of two sums. 
-        return (max_wrap > max_kadane)? max_wrap: max_kadane; 
-    } 
-    
-    //Standard Kadane's algorithm to find maximum subarray sum.
-    int kadane(int a[], int n) 
-    { 
-        int max_so_far = 0, max_ending_here = 0; 
-        int i; 
-        for (i = 0; i < n; i++) 
-        { 
-            //Storing max sum till current index.
-            max_ending_here = max_ending_here + a[i]; 
-            //If max sum till current index is negative, we update it to 0.
-            if (max_ending_here < 0) 
-                max_ending_here = 0; 
-            //Storing the max sum so far.
-            if (max_so_far < max_ending_here) 
-                max_so_far = max_ending_here; 
-        } 
-        return max_so_far; 
-    } 
+    }
+    int kdane(vector<int>& nums, int n){
+        int cur=0;
+        int ans=nums[0];
+        for(auto i: nums){
+            cur+=i;
+            ans= max(ans,cur);
+            cur= max(cur,0);
+        }
+        return ans;
+    }
 };
