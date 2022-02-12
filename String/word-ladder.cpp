@@ -1,31 +1,38 @@
 class Solution {
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> dict(wordList.begin(), wordList.end());
-        queue<string> todo;
-        todo.push(beginWord);
-        int ladder = 1;
-        while (!todo.empty()) {
-            int n = todo.size();
-            for (int i = 0; i < n; i++) {
-                string word = todo.front();
-                todo.pop();
-                if (word == endWord) {
-                    return ladder;
-                }
-                dict.erase(word);
-                for (int j = 0; j < word.size(); j++) {
-                    char c = word[j];
-                    for (int k = 0; k < 26; k++) {
-                        word[j] = 'a' + k;
-                        if (dict.find(word) != dict.end()) {
-                            todo.push(word);
+        unordered_set<string> wordDict(wordList.begin(), wordList.end());
+        if (wordDict.find(endWord) == wordDict.end()) {
+            return 0;
+        }
+        unordered_set<string> beginSet = {beginWord};
+        unordered_set<string> endSet = {endWord};
+        int step = 1;
+        while (!beginSet.empty()) {
+            unordered_set<string> tempSet;
+            for (auto& word : beginSet) {
+                wordDict.erase(word);
+            }
+            for (auto& word : beginSet) {
+                for (int i = 0; i < word.size(); ++i) {
+                    string curr = word;
+                    for (char ch = 'a'; ch <= 'z'; ++ch) {
+                        curr[i] = ch;
+                        if (endSet.find(curr) != endSet.end()) {
+                            return step + 1;
+                        } else if (wordDict.find(curr) != wordDict.end()) {
+                            tempSet.insert(curr);
                         }
-                     }
-                    word[j] = c;
+                    }
                 }
             }
-            ladder++;
+            step += 1;
+            if (tempSet.size() > endSet.size()) {
+                beginSet = endSet;
+                endSet = tempSet;
+            } else {
+                beginSet = tempSet;
+            }
         }
         return 0;
     }
