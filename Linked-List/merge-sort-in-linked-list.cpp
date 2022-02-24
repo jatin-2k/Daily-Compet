@@ -1,49 +1,36 @@
-class Solution{
-  public:
-    //Function to sort the given linked list using Merge Sort.
-    Node* splitList(Node *head) {
-        Node *slow,*fast, *temp = NULL;
-        slow = head; fast = head;
-        while(fast && fast->next){
-            
-            fast = fast-> next-> next;
-            if(!fast || !fast->next) temp = slow;
+class Solution {
+public:
+    ListNode* sortList(ListNode* head, ListNode *last = nullptr) {
+        if(!head or !head->next) return head;
+        ListNode *mid = NULL;
+        ListNode *slow = head, *fast = head->next;
+        while(fast and fast != last and fast->next and fast->next != last){
             slow = slow->next;
+            fast = fast->next->next;
         }
-        if(temp)
-        temp->next = NULL;
-        return slow;
+        mid = slow->next;
+        slow->next = NULL;
+        ListNode *l1 = sortList(head);
+        ListNode *l2 = sortList(mid);
+        return mergeSorted(l1,l2);
     }
-    
-    Node* merge(Node *head1, Node* head2){
-        Node * head = new Node(0), *temp;
-        temp = head;
-        while(head1 && head2){
-            if(head1->data <= head2->data){
-                head->next = head1;
-                head1 = head1-> next;
+    ListNode* mergeSorted(ListNode *l1, ListNode *l2){
+        ListNode *dummy = new ListNode(-1);
+        ListNode *cur = dummy;
+        while(l1 and l2){
+            if(l1->val < l2->val){
+                cur->next = l1;
+                l1 = l1->next;
             }
             else{
-                head->next = head2;
-                head2 = head2-> next;
+                cur->next = l2;
+                l2 = l2->next;
             }
-            head = head -> next;
+            cur = cur->next; 
+            cur -> next = NULL;
         }
-        if(head1) head -> next = head1;
-        if(head2) head -> next = head2;
-        
-        return temp -> next;
-    }
-    
-    Node* mergeSort(Node* head1) {
-        // your code here
-        Node *head2 = splitList(head1);
-        if(head2 == head1) return head1;
-        else{
-            if(head1) head1 = mergeSort(head1);
-            if(head2) head2 = mergeSort(head2);
-            return merge(head1, head2);
-        }
-        
+        if(l1) cur -> next = l1;
+        if(l2) cur -> next = l2;
+        return dummy->next;
     }
 };
