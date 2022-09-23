@@ -5,7 +5,7 @@ public:
         for (int i = 1; i <= n; ++i) {
             int len = 0;
             for (int j = i; j; j >>= 1, ++len);
-            ans = ((ans << len) % mod + i) % mod;
+            ans = ((ans << len) + i) % mod;
         }
         return ans;
     }
