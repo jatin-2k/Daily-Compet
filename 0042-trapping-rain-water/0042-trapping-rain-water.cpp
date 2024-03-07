@@ -3,37 +3,25 @@ public:
     int trap(vector<int>& arr) {
         int n = arr.size();
         int ans = 0;
-        vector<int> nl = ngl(arr,n);
-        vector<int> nr = ngr(arr,n);
-        // for(int i=0; i<n; i++) cout<<nl[i]<<", ";
-        // cout<<endl;
-        for(int i=0; i<n; i++){
-            if(nl[i] == -1 || nr[i] == n) continue;
-            ans += min(arr[nl[i]], arr[nr[i]]) - arr[i];
+        int l=0, r = n-1, h = 0;
+        while(l<r){
+            if(h < min(arr[l], arr[r])){
+                int overlap = h*(r-l-1);
+                h = min(arr[l], arr[r]);
+                ans += h*(r-l-1) - overlap;
+                //cout<<"h:"<<h<<" adding:"<<h*(r-l-1)-overlap<<" l:"<<l<<" r:"<<r<<endl;
+            }
+            if(arr[r] < arr[l]){
+                r--;
+                if(l<r) ans -= min(h, arr[r]);
+                //cout<<"moving r:"<<r<<" reducing"<<min(arr[r],h)<<endl;
+            }
+            else {
+                l++;
+                if(l<r) ans -= min(h, arr[l]);
+                //cout<<"moving l:"<<l<<" reducing"<<min(arr[l],h)<<endl;
+            }
         }
         return ans;
-    }
-    
-    vector<int> ngl(vector<int> &arr, int &n){
-        vector<int> ans(n);
-        stack<int> st;
-        for(int i=0; i<n; i++){
-            while(!st.empty() && arr[st.top()] <= arr[i]) st.pop();
-            ans[i] = st.empty() ? -1 : st.top();
-            if(st.empty() || arr[i] > arr[st.top()] ) st.push(i);
-        }
-        return ans;
-    }
-    
-    vector<int> ngr(vector<int> &arr, int &n){
-        vector<int> ans(n);
-        stack<int> st;
-        for(int i=n-1; i>=0; i--){
-            while(!st.empty() && arr[st.top()] <= arr[i]) st.pop();
-            ans[i] = st.empty() ? n : st.top();
-            if(st.empty() || arr[i] > arr[st.top()] ) st.push(i);
-        }
-        return ans;
-        //return {7,7,7,7,7,7,7,12,12,10,12,12};
     }
 };
