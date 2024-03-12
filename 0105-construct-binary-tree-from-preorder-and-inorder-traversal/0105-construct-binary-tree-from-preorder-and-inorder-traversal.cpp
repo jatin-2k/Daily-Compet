@@ -11,15 +11,30 @@
  */
 class Solution {
 public:
-    int i = 0;
-    int p = 0;
-    TreeNode* buildTree(vector<int>& po, vector<int>& io, int stop = INT_MIN) {
-        if(p >= po.size()) return nullptr;
-        if(io[i] == stop) return i++,nullptr;
+    TreeNode* solve(int &Postindex,int inI,int inJ,vector<int>&inorder, vector<int>&postorder)
+    {
+        if(Postindex>=postorder.size() || inI>inJ) // if the postorder index i.e(Postindex) is negative or the inI and inJ have collided 
+        {
+            return NULL;
+        }
+        TreeNode* root=new TreeNode(postorder[Postindex++]);
+        int i;
+        for( i=inI;i<=inJ;i++)
+        {
+            if(inorder[i]==root->val)
+            {
+                break;
+            }
+        }
         
-        TreeNode *t = new TreeNode(po[p++]);
-        t->left = buildTree(po, io, t->val);
-        t->right = buildTree(po, io, stop);
-        return t;
+        root->left=solve(Postindex,inI,i-1,inorder,postorder);
+        root->right=solve(Postindex,i+1,inJ,inorder,postorder); 
+        return root;
+    }
+    
+    
+    TreeNode* buildTree(vector<int>& po, vector<int>& io) {
+        int idx = 0;
+        return solve(idx,0,io.size()-1,io,po);
     }
 };
