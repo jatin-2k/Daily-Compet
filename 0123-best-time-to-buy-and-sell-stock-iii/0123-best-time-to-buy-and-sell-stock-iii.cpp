@@ -1,20 +1,39 @@
 class Solution {
-  public:
-  int maxProfit(vector<int>& prices) {
-    int t1Cost = INT_MIN, 
-        t2Cost = INT_MIN;
-    int t1Profit = 0,
-        t2Profit = 0;
-
-    for (int price : prices) {
-        // the maximum profit if only one transaction is allowed
-        t1Cost = max(t1Cost, -price);
-        t1Profit = max(t1Profit, price + t1Cost);
-        // re-invest the gained profit in the second transaction
-        t2Cost = max(t2Cost, -price + t1Profit);
-        t2Profit = max(t2Profit, price + t2Cost);
+public:
+    int n;
+    vector<int> prices;
+    
+    vector<int> profit;
+    
+    
+    void solve(int numTran){
+        if(numTran <= 0) return;
+        profit[0] = profit[0] - prices[0];
+        for(int i=1; i<n; i++){
+            profit[i] = max(profit[i-1], profit[i]-prices[i]);
+        }
+        profit[0] = profit[0] + prices[0];
+        for(int i=1; i<n; i++){
+            profit[i] = max(profit[i-1], profit[i]+prices[i]);
+        }
+        solve(numTran-1);
     }
-
-    return t2Profit;
-  }
+    int maxProfit(vector<int>& prices) {
+        this->n = prices.size();
+        this->prices = prices;
+        this->profit = vector<int>(prices.size(), 0);
+        solve(2);
+        return profit[n-1];
+    }
 };
+
+//  3  3  5  0  0  3  1  4
+
+// -3 -3 -3  0  0  0. 0. 0
+//  0. 0  2. 2  2. 3  3. 4
+// -3 -3 -3  2. 2  2  2  2
+//  0  0. 2  2  2  5  5  6
+// -3 -3 -3  2  2  2  4  4
+//  0. 0. 2  2. 2  5  5. 8
+
+    
