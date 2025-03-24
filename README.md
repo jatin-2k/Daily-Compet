@@ -24,4 +24,16 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 |  |
 | ------- |
 | [1528-kids-with-the-greatest-number-of-candies](https://github.com/jatin-2k/Daily-Compet/tree/master/1528-kids-with-the-greatest-number-of-candies) |
+## Depth-First Search
+|  |
+| ------- |
+| [0871-keys-and-rooms](https://github.com/jatin-2k/Daily-Compet/tree/master/0871-keys-and-rooms) |
+## Breadth-First Search
+|  |
+| ------- |
+| [0871-keys-and-rooms](https://github.com/jatin-2k/Daily-Compet/tree/master/0871-keys-and-rooms) |
+## Graph
+|  |
+| ------- |
+| [0871-keys-and-rooms](https://github.com/jatin-2k/Daily-Compet/tree/master/0871-keys-and-rooms) |
 <!---LeetCode Topics End-->
